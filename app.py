@@ -49,7 +49,7 @@ if img_file_buffer is not None:
                 name = response.json()['results'][0]['species']['commonNames'][0]
                 st.write(name)
                 dfe = pd.read_csv('plant_name.csv')
-                name = dfe[dfe['Plant Name'] == 'name']
+                name = dfe[dfe['Plant Name'] == name]
 
         
     st.write(name)
