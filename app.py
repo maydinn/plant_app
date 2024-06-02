@@ -47,18 +47,18 @@ if img_file_buffer is not None:
     if 'results' in rj.keys():
         if len(rj['results'] ) > 0:
             if len(response.json()['results'][0]['species']['commonNames']) > 0:
-                commonNames = response.json()['results'][0]['species']['commonNames'][0]             
+                commonNames = response.json()['results'][0]['species']['commonNames'][0].title()             
                 names = commonNames.split()
-
+                st.write(commonNames)
                 for name in names:
-                    if name in dfe['Plant Name'].unique():
-                        commonNames_df = dfe[dfe['Plant Name'] == name]
+                    
+                    commonNames_df = dfe[dfe['Plant Name'].str.contains(name)]
+                    if len(commonNames_df) > 0:
                         st.subheader(name)
                         for index, row in commonNames_df.iterrows():
                             with st.expander(f"{row['Title']}"):
                                 st.write(row['Description'])
-                    else:
-                        commonNames = "no info about how to care"
+                
 
         
     st.write(commonNames)
