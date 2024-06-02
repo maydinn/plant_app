@@ -5,7 +5,8 @@ import requests
 import io
 import pandas as pd
 API_PLANT = st.secrets["API_CUR"]
-
+dfe = pd.read_csv('plant_name.csv')
+name_list = de
 img_file_buffer = st.camera_input("Take a picture")
 
 if img_file_buffer is not None:
@@ -42,14 +43,20 @@ if img_file_buffer is not None:
     response = requests.post(url, headers=headers, params=params, files=files)
     rj = response.json()
 #    st.write(rj)
-    name = 'no plants found in picture or it is not our database'
+    commonNames = 'no plants found in picture or it is not our database'
     if 'results' in rj.keys():
         if len(rj['results'] ) > 0:
             if len(response.json()['results'][0]['species']['commonNames']) > 0:
-                name = response.json()['results'][0]['species']['commonNames'][0]
-                st.write(name)
-                dfe = pd.read_csv('plant_name.csv')
-                name = dfe[dfe['Plant Name'] == name]
+                commonNames = response.json()['results'][0]['species']['commonNames'][0]
+                st.write(commonNames)
+                commonNames = commonNames.lower()
+                names = commonNames.split()
+
+                for name in names:
+                    if name in dfe['Plant Name'].str.lower().unique():
+                        commonNames = dfe[dfe['Plant Name'] == name]
+                    else:
+                        commonNames = "no info about how to care"
 
         
-    st.write(name)
+    st.write(commonNames)
