@@ -47,7 +47,8 @@ if img_file_buffer is not None:
     if 'results' in rj.keys():
         if len(rj['results'] ) > 0:
             if len(response.json()['results'][0]['species']['commonNames']) > 0:
-                commonNames = response.json()['results'][0]['species']['commonNames'][0].title()             
+                commonNames = response.json()['results'][0]['species']['commonNames'][0].title()
+                commonNames = commonNames.replace('-', ' ')
                 names = commonNames.split()
                 st.write(commonNames)
                 for name in names:
