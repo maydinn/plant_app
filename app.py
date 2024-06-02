@@ -6,7 +6,7 @@ import io
 import pandas as pd
 API_PLANT = st.secrets["API_CUR"]
 dfe = pd.read_csv('plant_name.csv')
-name_list = de
+
 img_file_buffer = st.camera_input("Take a picture")
 
 if img_file_buffer is not None:
@@ -47,14 +47,16 @@ if img_file_buffer is not None:
     if 'results' in rj.keys():
         if len(rj['results'] ) > 0:
             if len(response.json()['results'][0]['species']['commonNames']) > 0:
-                commonNames = response.json()['results'][0]['species']['commonNames'][0]
-                st.write(commonNames)
-                commonNames = commonNames.lower()
+                commonNames = response.json()['results'][0]['species']['commonNames'][0]             
                 names = commonNames.split()
 
                 for name in names:
-                    if name in dfe['Plant Name'].str.lower().unique():
-                        commonNames = dfe[dfe['Plant Name'] == name]
+                    if name in dfe['Plant Name'].unique():
+                        commonNames_df = dfe[dfe['Plant Name'] == name]
+                        st.subheader(name)
+                        for index, row in commonNames_df.iterrows():
+                            with st.expander(f"{row['Title']}"):
+                                st.write(row['Description'])
                     else:
                         commonNames = "no info about how to care"
 
